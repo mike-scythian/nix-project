@@ -3,11 +3,12 @@ package ua.nix.project.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
 @Table(name = "student", schema = "nix")
 public class StudentEntity {
 
@@ -22,7 +23,7 @@ public class StudentEntity {
   @Column
   private String email;
 
-  @OneToMany(mappedBy = "student")
-  private Set<PhotoEntity> photos;
+  @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+  private List<PhotoEntity> photos;
 
 }

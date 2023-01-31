@@ -21,7 +21,7 @@ public class ProjectApplication {
   public static void main(String[] args) {
     SpringApplication.run(ProjectApplication.class, args);
   }
-
+/*
 
   @Bean
   public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
@@ -42,11 +42,11 @@ public class ProjectApplication {
 
       /*photoService.createPhoto("url1","image1", 10L);
       photoService.createPhoto("url2","image2", 9L);
-      photoService.createPhoto("url3","image3", 9L);*/
+      photoService.createPhoto("url3","image3", 9L);
 
       photoService.getPhotoByDescription("image2").forEach( ph -> System.out.println(ph.getUrl()));
 
     };
   }
-
+*/
 }
