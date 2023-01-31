@@ -4,3 +4,5 @@ spring:
     username: ${PGUSER}
     password: ${PGPASSWORD}
     name: nix-project
+server:
+  port: ${RUN-PORT}
