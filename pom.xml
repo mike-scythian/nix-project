@@ -20,6 +20,9 @@
     <postgresql.version>42.5.1</postgresql.version>
     <lombok.version>1.18.24</lombok.version>
     <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+    <mapstruct-processor-version>1.5.3.Final</mapstruct-processor-version>
+    <openapi-version>2.0.2</openapi-version>
+    <hibernate-validator-version>8.0.0.Final</hibernate-validator-version>
   </properties>
 
   <dependencies>
@@ -67,6 +70,25 @@
       <artifactId>mapstruct</artifactId>
       <version>${org.mapstruct.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct-processor</artifactId>
+      <version>${mapstruct-processor-version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>${openapi-version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>${hibernate-validator-version}</version>
+    </dependency>
+
   </dependencies>
 
   <build>

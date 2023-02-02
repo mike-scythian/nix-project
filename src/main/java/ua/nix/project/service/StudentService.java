@@ -1,54 +1,69 @@
 package ua.nix.project.service;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.Mapper;
 import org.springframework.stereotype.Service;
+import ua.nix.project.controller.mapper.StudentMapper;
 import ua.nix.project.exception.StudentNotFound;
 import ua.nix.project.repository.StudentRepository;
-import ua.nix.project.repository.dto.StudentDTO;
+import ua.nix.project.controller.dto.StudentDto;
 import ua.nix.project.repository.entity.StudentEntity;
-import ua.nix.project.repository.mapper.StudentMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class StudentService {
 
-  private final StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-  public void createStudent(String name, String email) {
+    public void createStudent(@NonNull String name, @NonNull String email) {
 
-    StudentEntity studentEntity = new StudentEntity();
-    studentEntity.setName(name);
-    studentEntity.setEmail(email);
+        StudentEntity studentEntity = new StudentEntity();
+        studentEntity.setName(name);
+        studentEntity.setEmail(email);
 
-    studentRepository.save(studentEntity);
-  }
-  public StudentDTO updateStudent(long id, StudentDTO newStudent) throws StudentNotFound{
-    StudentEntity student = studentRepository.findById(id).orElseThrow(StudentNotFound::new);
+        studentRepository.save(studentEntity);
+    }
 
-    student.setName(newStudent.getName());
-    student.setEmail(newStudent.getEmail());
+    public StudentDto updateStudent(long id, StudentDto newStudent) throws StudentNotFound {
 
-    //return StudentMapper.INSTANCE.toMap(studentRepository.save(student));
+        StudentEntity student = studentRepository.findById(id).orElseThrow(StudentNotFound::new);
 
-    return new StudentDTO().toMap(studentRepository.save(student));
-  }
-  public Optional<StudentDTO> findStudent(long id) {
+        if (newStudent.getName() != null)
+            student.setName(newStudent.getName());
 
-    return studentRepository.findById(id).map(st -> new StudentDTO().toMap(st));
-  }
-  public List<StudentDTO> getStudents(){
+        if (newStudent.getEmail() != null)
+            student.setEmail(newStudent.getEmail());
 
-    return studentRepository.findAll().stream()
-            .map(s -> new StudentDTO().toMap(s))
-            .toList();
-  }
+        if(!newStudent.getPhotos().isEmpty())
+            student.setPhotos(newStudent.getPhotos());
 
-  public void deleteStudent(long id){
+        return StudentMapper.INSTANCE.toMap(studentRepository.save(student));
+    }
 
-    studentRepository.deleteById(id);
-  }
+    public StudentDto findStudent(long id) {
+
+        return StudentMapper.INSTANCE.toMap(studentRepository.findById(id)
+                .orElseThrow(StudentNotFound::new));
+    }
+
+    public List<StudentDto> getStudents() {
+
+        return studentRepository.findAll().stream()
+                .map(StudentMapper.INSTANCE::toMap)
+                .toList();
+    }
+
+    public void deleteStudent(long id) {
+
+        if(studentRepository.existsById(id))
+            studentRepository.deleteById(id);
+        else
+            throw new StudentNotFound();
+    }
 
 }
