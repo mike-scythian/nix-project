@@ -26,5 +26,4 @@ public class PhotoEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private StudentEntity student;
-
 }

@@ -1,53 +1,57 @@
 package ua.nix.project.controller;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.nix.project.exception.StudentNotFound;
-import ua.nix.project.repository.dto.StudentDTO;
+import ua.nix.project.controller.dto.StudentDto;
 import ua.nix.project.service.StudentService;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class StudentController {
 
-    @Autowired
-    private StudentService studentService;
+
+    private final StudentService studentService;
 
     @GetMapping("/students")
-    public ResponseEntity<List<StudentDTO>> students() {
+    public ResponseEntity<List<StudentDto>> students() {
 
-        return ResponseEntity.ok(studentService.getStudents());
+        return new ResponseEntity<>(studentService.getStudents(), HttpStatus.CREATED);
     }
     @GetMapping("/students/{id}")
-    public ResponseEntity<StudentDTO> getStudent(@PathVariable("id") long studentId) throws StudentNotFound {
+    public ResponseEntity<StudentDto> getStudent(@PathVariable("id") long studentId){
 
-        StudentDTO studentDTO = studentService.findStudent(studentId).orElseThrow(StudentNotFound::new);
+        StudentDto studentDto = studentService.findStudent(studentId);
 
-        return ResponseEntity.ok(studentDTO);
+        return new ResponseEntity<>(studentDto, HttpStatus.FOUND);
 
     }
 
     @PostMapping("/students")
-    public ResponseEntity<Long> createStudent(@RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<Void> createStudent(@RequestBody StudentDto studentDto) {
 
-        studentService.createStudent(studentDTO.getName(), studentDTO.getEmail());
-        return ResponseEntity.ok().build();
+        studentService.createStudent(studentDto.getName(), studentDto.getEmail());
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @PutMapping("/students/{id}")
-    public ResponseEntity<StudentDTO> updateStudent(@PathVariable("id") long studentId,
-                                                    @RequestBody StudentDTO newStudent) throws StudentNotFound {
+    public ResponseEntity<StudentDto> updateStudent(@PathVariable("id") long studentId,
+                                                    @RequestBody StudentDto newStudent) {
 
-        return ResponseEntity.ok(studentService.updateStudent(studentId, newStudent));
+        return new ResponseEntity<>(studentService.updateStudent(studentId, newStudent), HttpStatus.CREATED);
     }
 
     @DeleteMapping("students/{id}")
-    public ResponseEntity deleteStudent(@PathVariable("id") long studentId){
+    public ResponseEntity<Void> deleteStudent(@PathVariable("id") long studentId){
+
         studentService.deleteStudent(studentId);
 
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

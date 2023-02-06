@@ -1,8 +1,8 @@
-package ua.nix.project.repository.mapper;
+package ua.nix.project.controller.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import ua.nix.project.repository.dto.StudentDTO;
+import ua.nix.project.controller.dto.StudentDto;
 import ua.nix.project.repository.entity.StudentEntity;
 
 
@@ -10,5 +10,6 @@ import ua.nix.project.repository.entity.StudentEntity;
 public interface StudentMapper {
     StudentMapper INSTANCE = Mappers.getMapper(StudentMapper.class);
 
-    StudentDTO toMap(StudentEntity student);
+    StudentDto toMap(StudentEntity student);
+    StudentEntity toEntityMap(StudentDto studentDto);
 }
