@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "student", schema = "nix")
 public class StudentEntity {
 

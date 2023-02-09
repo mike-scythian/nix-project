@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.nix.project.exception.StudentNotFound;
 import ua.nix.project.controller.dto.StudentDto;
 import ua.nix.project.service.StudentService;
 
@@ -28,16 +27,16 @@ public class StudentController {
 
         StudentDto studentDto = studentService.findStudent(studentId);
 
-        return new ResponseEntity<>(studentDto, HttpStatus.FOUND);
+        return new ResponseEntity<>(studentDto, HttpStatus.CREATED);
 
     }
 
     @PostMapping("/students")
-    public ResponseEntity<Void> createStudent(@RequestBody StudentDto studentDto) {
+    public ResponseEntity<StudentDto> createStudent(@RequestBody StudentDto studentDto) {
 
-        studentService.createStudent(studentDto.getName(), studentDto.getEmail());
+        StudentDto student = studentService.createStudent(studentDto.getName(), studentDto.getEmail());
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(student,HttpStatus.CREATED);
     }
     @PutMapping("/students/{id}")
     public ResponseEntity<StudentDto> updateStudent(@PathVariable("id") long studentId,
