@@ -1,35 +1,58 @@
 package ua.nix.project.controller;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import ua.nix.project.repository.dto.StudentDTO;
+import org.springframework.web.bind.annotation.*;
+import ua.nix.project.controller.dto.StudentDto;
 import ua.nix.project.service.StudentService;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class StudentController {
 
-    @Autowired
-    private StudentService studentService;
 
-    @GetMapping(path = "/students")
-    public ResponseEntity<List<StudentDTO>> students() {
+    private final StudentService studentService;
 
-        return ResponseEntity.ok(studentService.getStudents());
+    @GetMapping("/students")
+    public ResponseEntity<List<StudentDto>> students() {
+
+        return new ResponseEntity<>(studentService.getStudents(), HttpStatus.CREATED);
+    }
+    @GetMapping("/students/{id}")
+    public ResponseEntity<StudentDto> getStudent(@PathVariable("id") long studentId){
+
+        StudentDto studentDto = studentService.findStudent(studentId);
+
+        return new ResponseEntity<>(studentDto, HttpStatus.CREATED);
+
     }
 
-    @PostMapping("/new-student")
-    public ResponseEntity<Long> createStudent(@RequestBody StudentDTO studentDTO) {
+    @PostMapping("/students")
+    public ResponseEntity<StudentDto> createStudent(@RequestBody StudentDto studentDto) {
 
-        studentService.createStudent(studentDTO.getName(),studentDTO.getEmail());
-        return ResponseEntity.ok().build();
+        StudentDto student = studentService.createStudent(studentDto.getName(), studentDto.getEmail());
+
+        return new ResponseEntity<>(student,HttpStatus.CREATED);
     }
+    @PutMapping("/students/{id}")
+    public ResponseEntity<StudentDto> updateStudent(@PathVariable("id") long studentId,
+                                                    @RequestBody StudentDto newStudent) {
+
+        return new ResponseEntity<>(studentService.updateStudent(studentId, newStudent), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("students/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable("id") long studentId){
+
+        studentService.deleteStudent(studentId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 
 }
