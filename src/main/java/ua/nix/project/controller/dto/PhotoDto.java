@@ -1,4 +1,4 @@
-package ua.nix.project.repository.dto;
+package ua.nix.project.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentDTO {
-    private String name;
-    private String email;
+public class PhotoDto {
+
+    private long id;
+
+    private String url;
+
+    private String description;
+
 }
